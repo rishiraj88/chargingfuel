@@ -21,6 +21,7 @@ import java.util.List;
 public class AuthorizationServiceImpl implements AuthorizationService {
     private final AccessControlListRepo accessControlListRepo;
 
+
     @Override
     @KafkaListener(topics = "authz-check")
     public AuthorizationDecision checkAuthorization(AuthorizationCheckEvent authorizationCheckEvent) {

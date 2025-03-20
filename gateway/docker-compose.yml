@@ -13,7 +13,7 @@ services:
       - ./data:/data/db
 
   # In latest version of Kafka, KRaft takes care of clusters, hence external tool zookeeper is not required.
-  zookeeper:
+  zkpr:
     image: confluentinc/cp-zookeeper:7.5.0
     hostname: zookeeper
     container_name: zookeeper
@@ -30,7 +30,7 @@ services:
       - "9092:9092"
       - "29092:29092"
     depends_on:
-      - zookeeper
+      - zkpr
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
