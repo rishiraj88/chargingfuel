@@ -1,5 +1,6 @@
-package cp.chargeotg.authorization;
+package cp.chargeotg.authorization.controller;
 
+import cp.chargeotg.authorization.service.AuthorizationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController @Slf4j
 @RequestMapping("/api/v1/authz")
 public class AuthorizationController {
+    private final AuthorizationService authorizationService;
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public boolean isInStock(@RequestBody ChargingSessionAuthorizationReq chargingSessionAuthorizationReq) {
