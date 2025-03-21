@@ -1,23 +1,19 @@
 package cp.chargeotg.authorization.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Builder
+@Builder @AllArgsConstructor @NoArgsConstructor
 @Document(value = "product")
 public class AuthorizationDecision {
     @Id
     private String id;
     private String stationId;
     private String driverToken;
-    private String status; // Category may be inferred out of SKU code
-
-    public AuthorizationDecision(String stationId, String driverToken, String status) {
-      this.stationId = stationId;
-      this.driverToken = driverToken;
-      this.status = status;
-    }
+    private String status;
 }

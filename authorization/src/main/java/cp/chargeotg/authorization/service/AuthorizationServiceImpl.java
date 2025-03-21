@@ -9,9 +9,7 @@ import cp.chargeotg.authorization.repo.AccessControlListRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -20,7 +18,6 @@ import java.util.List;
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
     private final AccessControlListRepo accessControlListRepo;
-
 
     @Override
     @KafkaListener(topics = "authz-check")
@@ -32,18 +29,20 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         List<AccessControlList> acLists = accessControlListRepo.findAllByDriverGroup(driverGroup);
         if (null == acLists || acLists.isEmpty()) {
             status = AuthorizationDecisionDomain.INVALID;
-        } else if (driverGroup.equals(DriverGroup.EMPLOYEE) && acLists.stream().findFirst().get().getAccessHours().closingAt() . compareTo(acLists.stream().findFirst().get().getAccessHours().openingAt()) > 0  ) {
+        } else if (driverGroup.equals(DriverGroup.EMPLOYEE) && acLists.stream().findFirst().get().getAccessHours().closingAt().compareTo(acLists.stream().findFirst().get().getAccessHours().openingAt()) > 0) {
             status = AuthorizationDecisionDomain.ALLOWED;
-        }else if (driverGroup.equals(DriverGroup.OTHERS) && acLists.stream().findFirst().get().getAccessHours().closingAt() . compareTo(acLists.stream().findFirst().get().getAccessHours().openingAt()) < 0  ) {
+        } else if (driverGroup.equals(DriverGroup.OTHERS) && acLists.stream().findFirst().get().getAccessHours().closingAt().compareTo(acLists.stream().findFirst().get().getAccessHours().openingAt()) < 0) {
             status = AuthorizationDecisionDomain.ALLOWED;
-        }else status = AuthorizationDecisionDomain.NOT_ALLOWED;
+        } else status = AuthorizationDecisionDomain.NOT_ALLOWED;
 
-        AuthorizationDecision decision = new AuthorizationDecision(authorizationCheckEvent.driverToken(),authorizationCheckEvent.stationId().toString(),status.toString());
+        AuthorizationDecision decision = new AuthorizationDecision();
+        decision.setStationId(authorizationCheckEvent.stationId().toString());
+        decision.setDriverToken(authorizationCheckEvent.driverToken());
+        decision.setStatus(status.toString());
 
         //send this decision to callback URL
-
+        
         return null;// authorizationRepo.save(decision);
-
     }
 
     private DriverGroup getDriverGroup(String driverId) {
