@@ -1,11 +1,11 @@
 package cp.chargeotg.authorization.service;
 
-import cp.chargeotg.authorization.event.AuthorizationCheckEvent;
 import cp.chargeotg.authorization.model.AccessControlList;
 import cp.chargeotg.authorization.model.AuthorizationDecision;
 import cp.chargeotg.authorization.model.AuthorizationDecisionDomain;
 import cp.chargeotg.authorization.model.DriverGroup;
 import cp.chargeotg.authorization.repo.AccessControlListRepo;
+import cp.chargeotg.mq.AuthorizationCheckEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -25,7 +25,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         log.info("Got a message out of event: {}", authorizationCheckEvent);
 
         AuthorizationDecisionDomain status = AuthorizationDecisionDomain.UNKNOWN; // default value, and for timeout as well
-        DriverGroup driverGroup = getDriverGroup(authorizationCheckEvent.driverToken());
+        DriverGroup driverGroup = getDriverGroup(authorizationCheckEvent.getDriverToken().toString());
         List<AccessControlList> acLists = accessControlListRepo.findAllByDriverGroup(driverGroup);
         if (null == acLists || acLists.isEmpty()) {
             status = AuthorizationDecisionDomain.INVALID;
@@ -36,8 +36,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         } else status = AuthorizationDecisionDomain.NOT_ALLOWED;
 
         AuthorizationDecision decision = new AuthorizationDecision();
-        decision.setStationId(authorizationCheckEvent.stationId().toString());
-        decision.setDriverToken(authorizationCheckEvent.driverToken());
+        decision.setStationId(authorizationCheckEvent.getStationId().toString());
+        decision.setDriverToken(authorizationCheckEvent.getDriverToken().toString());
         decision.setStatus(status.toString());
 
         //send this decision to callback URL

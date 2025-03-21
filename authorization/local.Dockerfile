@@ -8,7 +8,7 @@ LABEL version="1.0"
 LABEL description="Dockerfile for Charging Session Management System::Authorization Service with JDK 21, Confluent Kafka and MongoDB"
 
 COPY target/authorization-0.0.1-SNAPSHOT.jar /app/target/
-EXPOSE 8080
+EXPOSE 8082
 CMD [ "java", "-jar","target/authorization-0.0.1-SNAPSHOT.jar" ]
 
 VOLUME ./data:/data/db

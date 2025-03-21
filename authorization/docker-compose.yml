@@ -1,8 +1,8 @@
 version: '4'
 services:
-  mongodb:
+  authzdb:
     image: mongo:7.0.5
-    container_name: mongodb
+    container_name: authzdb
     ports:
       - "27027:27017"
     environment:
@@ -20,4 +20,4 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - mongodb
+      - authzdb

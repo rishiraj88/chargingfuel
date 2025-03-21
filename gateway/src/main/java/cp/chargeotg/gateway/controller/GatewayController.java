@@ -25,7 +25,6 @@ public class GatewayController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Smarter way to add Status Code to Response
     public ChargingSessionResp createChargingSession(@RequestBody @Valid ChargingSessionReq chargingSessionReq) {
-
         return gatewayService.createChargingSession(chargingSessionReq);
     }
 }

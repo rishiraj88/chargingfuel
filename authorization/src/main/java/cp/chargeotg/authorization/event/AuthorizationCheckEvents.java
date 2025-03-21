@@ -1,6 +1,6 @@
 package cp.chargeotg.authorization.event;
 
-public record AuthorizationCheckEvent(
+public record AuthorizationCheckEvents(
      String stationId,
      String driverToken,
      String callbackUrl){
