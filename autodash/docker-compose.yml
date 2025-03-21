@@ -1,10 +1,10 @@
 version: '4'
 services:
-  mongodb:
+  autodashdb:
     image: mongo:7.0.5
-    container_name: mongodb
+    container_name: autodashdb
     ports:
-      - "27017:27017"
+      - "27007:27007"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -12,10 +12,12 @@ services:
     volumes:
       - ./data:/data/db
 
-  product:
-    build: .
+  autodash:
+    build:
+      context: .
+      dockerfile: local.Dockerfile
     container_name: driver
     ports:
-      - "8080:8080"
+      - "8084:8084"
     depends_on:
-      - mongodb
+      - autodashdb
