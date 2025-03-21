@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+data/
+src/main/java/cp/chargeotg/mq/
 
 ### STS ###
 .apt_generated
